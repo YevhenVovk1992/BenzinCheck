@@ -1,0 +1,30 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: 'postgres'
+    restart: always
+    hostname: 'postgres'
+    container_name: 'postgres_db'
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+  adminer:
+    image: 'adminer'
+    restart: always
+    ports:
+      - "8080:8080"
+
+  rabbit:
+    image: 'rabbitmq'
+    hostname: 'rabbitmq'
+    restart: always
+    container_name: 'rabbitmq'
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+
