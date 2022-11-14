@@ -23,7 +23,7 @@ class Region(models.Model):
 class FuelOperator(models.Model):
     name = models.CharField(max_length=200, null=False)
     info = models.TextField(null=False)
-    official_site = models.TextField(null=True)
+    official_site = models.URLField(null=True)
 
 
 class PriceTable(models.Model):
@@ -35,3 +35,12 @@ class PriceTable(models.Model):
         null=False,
         validators=[MinValueValidator(limit_value=1, message='Price must be greater then 0')]
     )
+
+    def to_dict(self):
+        return {
+            'fuel': self.id_fuel.name,
+            'region': self.id_region.name,
+            'fuel_operator': self.id_fuel_operator.name,
+            'data': str(self.date),
+            'price': str(self.price)
+        }

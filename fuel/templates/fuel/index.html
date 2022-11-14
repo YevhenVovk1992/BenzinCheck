@@ -1,0 +1,29 @@
+{% extends 'fuel/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div id="root">
+        <h1>Get data from API</h1>
+        <div class="form">
+            <form class="" action="/" method="POST">
+                <input id="message_text" class="form__input" type="text"
+                       name="type_of_fuel" placeholder="Enter type of fuel"/>
+                <input id="message_text" class="form__input" type="text"
+                       name="region" placeholder="Enter your region"/>
+                <input id="message_text" class="form__input" type="text"
+                       name="fuel_operator" placeholder="Enter fuel operator"/>
+                <button class="form__button" type="submit">
+                    <div class="" onclick="sendMessage()">
+                        Send
+                    </div>
+                </button>
+
+            </form>
+        </div>
+        <div id="messages">
+
+        </div>
+    </div>
+
+{% endblock %}

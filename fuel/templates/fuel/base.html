@@ -1,0 +1,26 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <link href={% static "fuel/css/style.css" %} rel="stylesheet" />
+</head>
+<body>
+   <div>
+    <h1>Add new object to database</h1>
+        <a href={% url 'add_data' form_obj='region' %}>Add region</a>
+        <a href={% url 'add_data' form_obj='fuel' %}>Add fuel</a>
+        <a href={% url 'add_data' form_obj='fuel_operator' %}>Add fuel operator</a>
+    </div>
+{% block content %}
+
+{% endblock %}
+</body>
+<script type="application/javascript">
+    const sendMessage = () => {
+        alert('Your link is being processed');
+    }
+</script>
+</html>

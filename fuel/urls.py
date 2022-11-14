@@ -13,12 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path
 
 from fuel import views
 
 urlpatterns = [
     path('', views.index, name='start_page'),
-    path('<int:id_fuel>', views.fuel_data, name='fuel_data')
+    path('add_<str:form_obj>', views.add_data, name='add_data'),
+    path('fuel_price_add', views.add_fuel_price, name='add_fuel_price'),
+    path('region/<int:id_region>', views.fuel_data_handler, name='fuel_in_region'),
+    path('fuel_operator/<int:id_fuel_operator>', views.fuel_data_handler, name='fuel_in_region'),
+    path('history/region-<int:id_region>', views.history_handler, name='history_region'),
+    path('history/fuel_operator-<int:id_fuel_operator>', views.history_handler, name='history_fuel_operator')
 ]

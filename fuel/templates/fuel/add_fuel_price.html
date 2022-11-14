@@ -1,0 +1,38 @@
+{% extends 'fuel/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div id="root">
+        <h1>Add new {{ message }}</h1>
+        <div class="form">
+            <form class="" action="" method="POST">
+                {% csrf_token %}
+
+                <input id="fuel_name" class="form__input" type="text"
+                       name="fuel_name" placeholder="Enter fuel name ..."/>
+
+                <input id="price" class="form__input" type="text"
+                       name="price" placeholder="Enter price ..."/>
+
+                <input id="fuel_operator" class="form__input" type="text"
+                       name="fuel_operator" placeholder="Enter fuel_operator ..."/>
+
+                <input id="region" class="form__input" type="text"
+                       name="region" placeholder="Enter region ..."/>
+
+                <input id="data" class="form__input" type="datafield"
+                       name="data" placeholder="Enter data ..."/>
+
+                <button class="form__button" type="submit">
+                    <div class="" onclick="sendMessage()">
+                        Send
+                    </div>
+                </button>
+
+            </form>
+        </div>
+        <div id="messages">
+
+        </div>
+    </div>
+{% endblock %}
