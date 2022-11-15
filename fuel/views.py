@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 
 from fuel import models
 from fuel import forms
+from utils import GetChoices
 
 
 # Create your views here.
@@ -70,13 +71,30 @@ def add_data(request, form_obj):
 
 def add_fuel_price(request):
     if request.method == 'GET':
+
         data = {
-            'title': 'Add Price'
+            'title': 'Add Price',
+            'fuel_choices': GetChoices.Choices.fuel_choices(),
+            'fuel_operator_choices': GetChoices.Choices.fuel_operator_choices(),
+            'region_choices': GetChoices.Choices.region_choices()
         }
         return render(request, 'fuel/add_fuel_price.html', data)
     if request.method == 'POST':
-        fuel_name = request.POST.get('fuel_name')
+        id_fuel = request.POST.get('fuel_name')
         price = request.POST.get('price')
-        fuel_operator = request.POST.get('fuel_operator')
-        region = request.POST.get('region')
-        data = request.POST.get('data')
+        id_fuel_operator = request.POST.get('fuel_operator')
+        id_region = request.POST.get('region')
+        date = request.POST.get('date')
+        try:
+            add_data_to_db = models.PriceTable(
+                id_fuel=models.Fuel.objects.filter(id=id_fuel).first(),
+                id_region=models.Region.objects.filter(id=id_region).first(),
+                id_fuel_operator=models.FuelOperator.objects.filter(id=id_fuel_operator).first(),
+                date=date,
+                price=price
+            )
+            add_data_to_db.full_clean()
+            add_data_to_db.save()
+        except Exception:
+            return HttpResponse('Form is not valid')
+        return redirect('start_page')

@@ -7,22 +7,30 @@
         <div class="form">
             <form class="" action="" method="POST">
                 {% csrf_token %}
-
-                <input id="fuel_name" class="form__input" type="text"
-                       name="fuel_name" placeholder="Enter fuel name ..."/>
-
+                <label for="fuel_name">Choose a fuel_name:</label>
+                  <select class="form__input" id="fuel_name" name="fuel_name">
+                      {% for el in fuel_choices %}
+                          <option value={{ el.0 }}>{{ el.1 }}</option>
+                      {% endfor %}
+                  </select>
+                <label for="fuel_operator">Choose a fuel operator:</label>
+                      <select class="form__input" id="fuel_operator" name="fuel_operator">
+                          {% for el in fuel_operator_choices %}
+                              <option value={{ el.0 }}>{{ el.1 }}</option>
+                          {% endfor %}
+                      </select>
+                <label for="region">Choose a region:</label>
+                      <select class="form__input" id="region" name="region">
+                          {% for el in region_choices %}
+                              <option value={{ el.0 }}>{{ el.1 }}</option>
+                          {% endfor %}
+                      </select>
+                <label for="date">Choose a date:</label>
+                <input id="date" class="form__input" type="date"
+                       name="date" />
+                <label for="price">Choose a price:</label>
                 <input id="price" class="form__input" type="text"
                        name="price" placeholder="Enter price ..."/>
-
-                <input id="fuel_operator" class="form__input" type="text"
-                       name="fuel_operator" placeholder="Enter fuel_operator ..."/>
-
-                <input id="region" class="form__input" type="text"
-                       name="region" placeholder="Enter region ..."/>
-
-                <input id="data" class="form__input" type="datafield"
-                       name="data" placeholder="Enter data ..."/>
-
                 <button class="form__button" type="submit">
                     <div class="" onclick="sendMessage()">
                         Send

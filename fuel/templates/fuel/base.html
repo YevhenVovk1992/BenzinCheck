@@ -10,9 +10,13 @@
 <body>
    <div>
     <h1>Add new object to database</h1>
-        <a href={% url 'add_data' form_obj='region' %}>Add region</a>
-        <a href={% url 'add_data' form_obj='fuel' %}>Add fuel</a>
-        <a href={% url 'add_data' form_obj='fuel_operator' %}>Add fuel operator</a>
+       <ul>
+          <li><button onclick=""><a href={% url 'add_data' form_obj='region' %}>Add region</a></button></li>
+          <li><button onclick=""><a href={% url 'add_data' form_obj='fuel' %}>Add fuel</a></button></li>
+          <li><button onclick=""><a href={% url 'add_data' form_obj='fuel_operator' %}>Add fuel operator</a></button></li>
+          <li><button onclick=""><a href={% url 'add_fuel_price' %}>Add fuel price for the fuel</a></button></li>
+        </ul>
+
     </div>
 {% block content %}
 
@@ -20,7 +24,7 @@
 </body>
 <script type="application/javascript">
     const sendMessage = () => {
-        alert('Your link is being processed');
+        alert('We send your data to the server');
     }
 </script>
 </html>

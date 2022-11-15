@@ -30,7 +30,7 @@ class PriceTable(models.Model):
     id_fuel = models.ForeignKey(Fuel, null=False, related_name='fuel', on_delete=models.RESTRICT)
     id_region = models.ForeignKey(Region, null=False, related_name='region', on_delete=models.RESTRICT)
     id_fuel_operator = models.ForeignKey(FuelOperator, null=False, related_name='operator', on_delete=models.RESTRICT)
-    date = models.DateField(null=False, validators=[DateValidator])
+    date = models.DateField(null=False, validators=[DateValidator.date_validator])
     price = models.IntegerField(
         null=False,
         validators=[MinValueValidator(limit_value=1, message='Price must be greater then 0')]

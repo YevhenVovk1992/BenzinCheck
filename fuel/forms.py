@@ -22,7 +22,7 @@ class RegionForm(forms.ModelForm):
 
 
 class FuelOperatorForm(forms.ModelForm):
-    name = forms.CharField(max_length=200, label='Name of the region')
+    name = forms.CharField(max_length=200, label='Name of the fuel operator')
     info = forms.CharField(label='Description', widget=forms.Textarea)
     official_site = forms.URLField(max_length=250, label='URL')
 
