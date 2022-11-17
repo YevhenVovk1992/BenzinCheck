@@ -1,11 +1,13 @@
 import datetime
-import psycopg2
-import requests
+import asyncio
+import aiohttp
+import asyncpg
 
 from bs4 import BeautifulSoup
 from pathlib import Path
 
 from utils.GetEnviromentVariable import get_environment_variables
+
 
 URL = "https://auto.ria.com/uk/toplivo/"
 regions = [('vinnica', 'Вінницька'),
@@ -39,7 +41,7 @@ HEADERS = {
 }
 
 
-def db_connect():
+async def db_connect():
     """
         String for getting all data from database:
         select fuel_pricetable.price, ff.name, fr.name, f.name
@@ -49,36 +51,36 @@ def db_connect():
         join fuel_fueloperator f on f.id = fuel_pricetable.id_fuel_operator_id
     :return: cursor
     """
-    BASE_DIR = Path(__file__).resolve().parent.parent
-    env = get_environment_variables(BASE_DIR)
-    conn = psycopg2.connect(user=env('POSTGRES_USER'),
-                            password=env('POSTGRES_PASSWORD'),
-                            host=env('DB_HOST'),
-                            port=env('DB_PORT'),
-                            dbname=env('POSTGRES_DB'), )
+    base_dir = str(Path(__file__).resolve().parent.parent)
+    env = get_environment_variables(base_dir)
+    return await asyncpg.connect(user=env('POSTGRES_USER'),
+                                 password=env('POSTGRES_PASSWORD'),
+                                 database=env('POSTGRES_DB'),
+                                 host=env('DB_HOST'),
+                                 port=env('DB_PORT')
+                                 )
 
-    return conn
 
-
-def get_html(url: str, query_list: list) -> list:
+async def get_html(url: str, query_list: list) -> list:
     html_list = []
     for query in query_list:
         url += f'{query[0]}/#refuel'
         try:
-            request = requests.get(url, headers=HEADERS)
-            if request.status_code == 200:
-                html_list.append({query[1]: request})
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, headers=HEADERS) as resp:
+                    if resp.status == 200:
+                        html_list.append({query[1]: await resp.text()})
         except:
             continue
     return html_list
 
 
-def page_parse(html_list: list) -> list:
-    rezult = []
+async def page_parse(html_list: list) -> list:
+    result_list = []
     fuel_price = dict()
     for region in html_list:
         for key, value in region.items():
-            soup = BeautifulSoup(value.text, 'html.parser')
+            soup = BeautifulSoup(value, 'html.parser')
             tables = [
                 [
                     [td.get_text(strip=True) for td in tr.find_all('td')]
@@ -94,22 +96,18 @@ def page_parse(html_list: list) -> list:
                     'Diesel': el[4],
                     'Gas': el[5]
                 }
-            rezult.append({key: fuel_price})
-    return rezult
+            result_list.append({key: fuel_price})
+    return result_list
 
 
-def write_to_db(data_list: list):
+async def write_to_db(data_list: list):
     sql_string = "insert into fuel_pricetable(date, price, id_fuel_id, id_fuel_operator_id, id_region_id) values"
     now_data = datetime.date.today()
     sql_values_list = []
-    db = db_connect()
-    cursor = db.cursor()
-    cursor.execute('select name, id from fuel_region')
-    regions_name_list = dict(itm for itm in cursor.fetchall())
-    cursor.execute('select name, id from fuel_fuel')
-    fuel_name_list = dict(itm for itm in cursor.fetchall())
-    cursor.execute('select name, id from fuel_fueloperator')
-    fuel_operator_name_list = dict(itm for itm in cursor.fetchall())
+    conn = await db_connect()
+    regions_name_list = dict(await conn.fetch('select name, id from fuel_region'))
+    fuel_name_list = dict(await conn.fetch('select name, id from fuel_fuel'))
+    fuel_operator_name_list = dict(await conn.fetch('select name, id from fuel_fueloperator'))
 
     # Parse a list of data
     for itm in data_list:
@@ -119,10 +117,9 @@ def write_to_db(data_list: list):
                 continue
             for fuel_operator, fuel in value.items():
                 if fuel_operator not in fuel_operator_name_list:
-                    print(f'{fuel_operator} not in database')
+                    print(f'{fuel_operator} from {region} not in database')
                     continue
                 for name, price in fuel.items():
-                    # print(region, fuel_operator, name, price)
                     if price == '-':
                         continue
                     if name not in fuel_name_list:
@@ -135,16 +132,15 @@ def write_to_db(data_list: list):
                     (select id from fuel_region where name='{region}'))"""
                     sql_values_list.append(sql_insert_one)
     sql_string += ', '.join(sql_values_list) + ';'
-    cursor.execute(sql_string)
-    db.commit()
-    db.close()
+    await conn.execute(sql_string)
+    await conn.close()
 
 
-def main():
-    all_html_pages = get_html(URL, regions)
-    fuel_data = page_parse(all_html_pages)
-    write_to_db(fuel_data)
+async def main():
+    all_html_pages = await get_html(URL, regions)
+    fuel_data = await page_parse(all_html_pages)
+    await write_to_db(fuel_data)
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.get_event_loop().run_until_complete(main())
