@@ -1,6 +1,6 @@
 import json
 
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.utils import timezone
 from django.shortcuts import render, redirect
 
@@ -27,6 +27,9 @@ def index(request):
     if request.method == 'POST':
         now_date = timezone.now().date()
         filter_params = {}
+        data = {
+            'title': 'Price fuel'
+        }
         type_of_fuel = request.POST.get('type_of_fuel')
         region = request.POST.get('region')
         fuel_operator = request.POST.get('fuel_operator')
@@ -41,8 +44,9 @@ def index(request):
         if filter_params:
             query += ' and '
             query += ' and '.join(list(f'{key}={value}' for key, value in filter_params.items()))
-        data_from_db = models.PriceTable.objects.raw(query)
-        return HttpResponse([itm.to_dict() for itm in data_from_db])
+        data_from_db = models.PriceTable.objects.raw(query+' ORDER BY id_fuel_id, id_region_id')
+        data['info'] = [itm.to_dict() for itm in data_from_db]
+        return render(request, 'fuel/fuel_price_table.html', data)
 
 
 def fuel_data_handler(request, **kwargs):

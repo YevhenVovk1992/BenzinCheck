@@ -1,0 +1,30 @@
+{% extends 'fuel/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div id="root">
+        <table class="table table-striped">
+                <thead class="thead-dark">
+                <col width="50">
+                <col width="150" >
+                <col width="150" >
+                <col width="150" >
+                <col width="50">
+                    <tr>
+                        {% for k in info|first %}
+                        <th scope="col">{{k|upper}}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                {% for el in info %}
+                    <tr>
+                    {% for e in el.values %}
+                            <td>{{e}}</td>
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+    </div>
+{% endblock %}
