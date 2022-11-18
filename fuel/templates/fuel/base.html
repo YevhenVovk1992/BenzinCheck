@@ -8,7 +8,9 @@
     <link href={% static "fuel/css/style.css" %} rel="stylesheet" />
 </head>
 <body>
+{% if user.is_superuser %}
    <div>
+    <a href={% url 'logout' %}>Logout</a>
     <h1>Add new object to database</h1>
        <ul>
           <li><button onclick=""><a href={% url 'add_data' form_obj='region' %}>Add region</a></button></li>
@@ -16,8 +18,10 @@
           <li><button onclick=""><a href={% url 'add_data' form_obj='fuel_operator' %}>Add fuel operator</a></button></li>
           <li><button onclick=""><a href={% url 'add_fuel_price' %}>Add fuel price for the fuel</a></button></li>
         </ul>
-
     </div>
+{% else  %}
+    <a href={% url 'login' %}>Login</a>
+{% endif %}
 {% block content %}
 
 {% endblock %}

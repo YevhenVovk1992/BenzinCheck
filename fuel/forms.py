@@ -29,3 +29,8 @@ class FuelOperatorForm(forms.ModelForm):
     class Meta:
         model = models.FuelOperator
         fields = ('name', 'info', 'official_site')
+
+
+class UserLogin(forms.Form):
+    username = forms.CharField(max_length=120, label='Name')
+    password = forms.CharField(max_length=50, widget=forms.PasswordInput())

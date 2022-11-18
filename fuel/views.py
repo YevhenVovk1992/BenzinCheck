@@ -1,6 +1,8 @@
 import json
-from datetime import timedelta
 
+from datetime import timedelta
+from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.utils import timezone
 from django.shortcuts import render, redirect
@@ -180,3 +182,36 @@ def add_fuel_price(request):
         except Exception:
             return HttpResponse('Form is not valid')
         return redirect('start_page')
+
+
+def user_login(request):
+    if request.method == 'GET':
+        form = forms.UserLogin()
+        data = {
+            'title': 'User Login',
+            'form': form
+        }
+        return render(request, 'fuel/login.html', data)
+    if request.method == 'POST':
+        form = forms.UserLogin(request.POST)
+        if form.is_valid():
+            user = authenticate(
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password']
+            )
+            if user is not None:
+                if request.user.is_authenticated:
+                    return HttpResponse('You are already logged in')
+                if user.is_active:
+                    login(request, user)
+                    return redirect('start_page')
+                else:
+                    return HttpResponse('Account not verified')
+            else:
+                return HttpResponse('Account is not correct')
+
+
+@login_required(login_url='login')
+def user_logout(request):
+    logout(request)
+    return redirect('start_page')

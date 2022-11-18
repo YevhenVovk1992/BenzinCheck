@@ -15,15 +15,33 @@ class Fuel(models.Model):
     name = models.CharField(max_length=120, null=False)
     type = models.CharField(max_length=50, choices=FuelType.choices, null=False)
 
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']
+
 
 class Region(models.Model):
     name = models.CharField(max_length=200, null=False)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']
 
 
 class FuelOperator(models.Model):
     name = models.CharField(max_length=200, null=False)
     info = models.TextField(null=False)
     official_site = models.URLField(null=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']
 
 
 class PriceTable(models.Model):
@@ -44,3 +62,6 @@ class PriceTable(models.Model):
             'data': str(self.date),
             'price': str(self.price)
         }
+
+    class Meta:
+        ordering = ['date']
