@@ -12,6 +12,11 @@ html {
             color: white;
             text-shadow: 0 2px 5px rgba(150, 150, 150, 0.8);
         }
+        h3 {
+            text-align: center;
+            color: white;
+            text-shadow: 0 2px 5px rgba(150, 150, 150, 0.8);
+        }
 
         #root {
             display: flex;

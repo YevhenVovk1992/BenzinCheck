@@ -31,11 +31,34 @@
                         Send
                     </div>
                 </button>
-
             </form>
-        </div>
-        <div id="messages">
 
+
+            <section id="geo">
+               <h3>How to make an API call </h3>
+               <p>API call:</p>
+               <div class="api">
+                  <code>http://host/fuel/--region--or--fuel_operator--/--name region--or--name operator--</code>
+               </div>
+               <div class="info-board">
+                  <p>Parameter --region--. Here you need to specify the search region. The region is written in Ukraine.
+                  You can check the spelling on the website form for correct spelling.</p>
+                   <p>This URL will turn you a JSON file with fuel prices in the area.</p>
+                   <p>Additional query parameter --fuel-- used to filter by fuel type</p>
+                  <p>For example:</p>
+                  <code>http://127.0.0.1:8000/fuel/region/Сумська</code>
+                   <p>Get the price of fuel in Sumy region</p>
+                   <code>http://127.0.0.1:8000/fuel/region/Сумська?fuel=A95</code>
+                    <p>Get the price of fuel in Sumy region only for A95 fuel</p>
+               </div>
+                <h3>How to get price history</h3>
+                <div class="api">
+                  <code>http://host/fuel/--region--or--fuel_operator--/--name region--or--name operator--</code>
+               </div>
+            </section>
+
+
+        <div id="messages">
         </div>
     </div>
 

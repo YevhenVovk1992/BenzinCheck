@@ -44,7 +44,7 @@ def index(request):
         if filter_params:
             query += ' and '
             query += ' and '.join(list(f'{key}={value}' for key, value in filter_params.items()))
-        data_from_db = models.PriceTable.objects.raw(query+' ORDER BY id_fuel_id, id_region_id')
+        data_from_db = models.PriceTable.objects.raw(query + ' ORDER BY id_fuel_id, id_region_id')
         data['info'] = [itm.to_dict() for itm in data_from_db]
         return render(request, 'fuel/fuel_price_table.html', data)
 
@@ -58,8 +58,19 @@ def fuel_data_handler(request, **kwargs):
     """
     filter_params = kwargs
     filter_params['date'] = timezone.now().date()
-    if request.GET and 'id_fuel' in request.GET:
-        filter_params.update(request.GET.items())
+    if request.GET and 'fuel' in request.GET:
+        filter_params['id_fuel'] = request.GET.get('fuel')
+    try:
+        if 'id_fuel' in filter_params:
+            get_id_fuel = models.Fuel.objects.get(name=filter_params['id_fuel']).id
+            filter_params['id_fuel'] = get_id_fuel
+        get_id_region = models.Region.objects.get(name=filter_params['id_region']).id
+        filter_params['id_region'] = get_id_region
+    except Exception as exep:
+        print(exep)
+        json_data = json.dumps({'Error': 'Parameters are not correct'})
+        return HttpResponse(json_data, content_type='application/json')
+
     fuel = models.PriceTable.objects.filter(**filter_params).all()
     json_data = json.dumps([itm.to_dict() for itm in fuel])
     return HttpResponse(json_data, content_type='application/json')
