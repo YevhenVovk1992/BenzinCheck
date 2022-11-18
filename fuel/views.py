@@ -1,4 +1,5 @@
 import json
+from datetime import timedelta
 
 from django.http import HttpResponse
 from django.utils import timezone
@@ -59,18 +60,23 @@ def fuel_data_handler(request, **kwargs):
     filter_params = kwargs
     filter_params['date'] = timezone.now().date()
     if request.GET and 'fuel' in request.GET:
-        filter_params['id_fuel'] = request.GET.get('fuel')
-    try:
-        if 'id_fuel' in filter_params:
-            get_id_fuel = models.Fuel.objects.get(name=filter_params['id_fuel']).id
-            filter_params['id_fuel'] = get_id_fuel
-        get_id_region = models.Region.objects.get(name=filter_params['id_region']).id
-        filter_params['id_region'] = get_id_region
-    except Exception as exep:
-        print(exep)
-        json_data = json.dumps({'Error': 'Parameters are not correct'})
-        return HttpResponse(json_data, content_type='application/json')
-
+        print(request.GET.get('fuel'))
+        get_id_fuel = models.Fuel.objects.get(name=request.GET.get('fuel'))
+        filter_params['id_fuel'] = get_id_fuel.id
+    if 'id_region' in filter_params:
+        try:
+            get_id_region = models.Region.objects.get(name=filter_params['id_region']).id
+            filter_params['id_region'] = get_id_region
+        except Exception:
+            json_data = json.dumps({'Error': 'Parameters are not correct'})
+            return HttpResponse(json_data, content_type='application/json')
+    else:
+        try:
+            get_id_fuel_operator = models.FuelOperator.objects.get(name=filter_params['id_fuel_operator']).id
+            filter_params['id_fuel_operator'] = get_id_fuel_operator
+        except Exception:
+            json_data = json.dumps({'Error': 'Parameters are not correct'})
+            return HttpResponse(json_data, content_type='application/json')
     fuel = models.PriceTable.objects.filter(**filter_params).all()
     json_data = json.dumps([itm.to_dict() for itm in fuel])
     return HttpResponse(json_data, content_type='application/json')
@@ -88,10 +94,26 @@ def history_handler(request, **kwargs):
     data_range = dict()
     now_data = timezone.now().date()
     if request.GET:
-        data_range['start_data'] = request.GET.get('start_data')
+        data_range['start_data'] = request.GET.get('start_data', now_data - timedelta(days=1))
         data_range['end_data'] = request.GET.get('end_data', now_data)
         filter_params['date__range'] = [data_range['start_data'], data_range['end_data']]
+    if 'id_fuel_operator' in filter_params:
+        try:
+            get_id_fuel_operator = models.FuelOperator.objects.get(name=filter_params['id_fuel_operator']).id
+            filter_params['id_fuel_operator'] = get_id_fuel_operator
+        except Exception:
+            json_data = json.dumps({'Error': 'Parameters are not correct'})
+            return HttpResponse(json_data, content_type='application/json')
+    else:
+        try:
+            get_id_region = models.Region.objects.get(name=filter_params['id_region']).id
+            filter_params['id_region'] = get_id_region
+        except Exception:
+            json_data = json.dumps({'Error': 'Parameters are not correct'})
+            return HttpResponse(json_data, content_type='application/json')
+    print(filter_params)
     fuel = models.PriceTable.objects.filter(**filter_params).order_by('date').all()
+    print(fuel.query)
     json_data = json.dumps([itm.to_dict() for itm in fuel])
     return HttpResponse(json_data, content_type='application/json')
 

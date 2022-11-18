@@ -90,7 +90,7 @@ async def page_parse(html_list: list) -> list:
             ]
             for el in tables[0][1:]:
                 fuel_price[el[0]] = {
-                    'A95+': el[1],
+                    'A95plus': el[1],
                     'A95': el[2],
                     'A92': el[3],
                     'Diesel': el[4],

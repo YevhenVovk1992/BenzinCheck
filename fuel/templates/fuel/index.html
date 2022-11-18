@@ -33,16 +33,17 @@
                 </button>
             </form>
 
-
-            <section id="geo">
+            <section id="">
                <h3>How to make an API call </h3>
                <p>API call:</p>
                <div class="api">
-                  <code>http://host/fuel/--region--or--fuel_operator--/--name region--or--name operator--</code>
+                  <code>http://host/fuel/--region--or--fuel_operator--/--name region--or--name operator--?fuel=name of fuel</code>
                </div>
                <div class="info-board">
                   <p>Parameter --region--. Here you need to specify the search region. The region is written in Ukraine.
                   You can check the spelling on the website form for correct spelling.</p>
+                   <p>Parameter --fuel_operator--. Write the name of the gas station as indicated on their official website.</p>
+                   <p>Parameter --fuel--. Write the type of fuel. For gasoline A95 or A92, for diesel - diesel, for gas - gas.</p>
                    <p>This URL will turn you a JSON file with fuel prices in the area.</p>
                    <p>Additional query parameter --fuel-- used to filter by fuel type</p>
                   <p>For example:</p>
@@ -53,7 +54,20 @@
                </div>
                 <h3>How to get price history</h3>
                 <div class="api">
-                  <code>http://host/fuel/--region--or--fuel_operator--/--name region--or--name operator--</code>
+                  <code>http://host/fuel/history/--region--or--fuel_operator--/--name region--or--name operator--?start_data=yyyy-mm-dd&end_data=yyyy-mm-dd</code>
+                  <p>By default you can view the history for the last 2 days.
+                      To get history for a period you need to use the query parameter: --start_data-- and --end_data--</p>
+                    <p>Parameter --region--. Here you need to specify the search region. The region is written in Ukraine.
+                  You can check the spelling on the website form for correct spelling.</p>
+                   <p>Parameter --fuel_operator--. Write the name of the gas station as indicated on their official website.</p>
+                    <p>For example:</p>
+                  <code>http://http://127.0.0.1:8000/fuel/history/region/Сумська</code>
+                    <p>Get prices for the last 2 days for the region Sumy</p>
+                   <code>http://127.0.0.1:8000/fuel/history/fuel_operator/WOG?start_data=2022-11-16</code>
+                    <p>In this example, we get data on WOG fuel station in th period from 2022-11-16 to today.</p>
+                    <code>http://127.0.0.1:8000/fuel/history/region/Вінницька?start_data=2022-11-15&end_data=2022-11-17</code>
+                    <p>Get prices in the period from 2022-11-15 to 2022-11-17 for the region Vinnitsiy</p>
+
                </div>
             </section>
 
