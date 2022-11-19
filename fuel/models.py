@@ -65,3 +65,9 @@ class PriceTable(models.Model):
 
     class Meta:
         ordering = ['date']
+
+
+class UpdateDatabase(models.Model):
+    id_task = models.CharField(max_length=250, null=False)
+    run_date = models.DateField(null=False, validators=[DateValidator.date_validator])
+    status = models.CharField(max_length=100, null=False)

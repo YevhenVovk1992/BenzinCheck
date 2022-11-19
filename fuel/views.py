@@ -1,4 +1,5 @@
 import json
+import pathlib
 
 from datetime import timedelta
 from django.contrib.auth import logout, authenticate, login
@@ -7,9 +8,9 @@ from django.http import HttpResponse
 from django.utils import timezone
 from django.shortcuts import render, redirect
 
-from fuel import models
-from fuel import forms
+from fuel import models, forms, tasks
 from utils import GetChoices
+
 
 
 # Create your views here.
@@ -215,3 +216,26 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('start_page')
+
+
+def update_database(request):
+    now_date = timezone.now().date()
+    get_run_date = models.UpdateDatabase.objects.order_by('-run_date').first()
+    if get_run_date is not None:
+        update_date = get_run_date.run_date
+    else:
+        update_date = now_date - timedelta(days=1)
+    if now_date > update_date:
+        try:
+            id_task = tasks.update_data.delay(str(now_date))
+            task = models.UpdateDatabase(
+                id_task=id_task,
+                run_date=now_date,
+                status='send to celery'
+            )
+            task.save()
+        except Exception:
+            return HttpResponse('Not connection to the database')
+        return HttpResponse(f'Start process {id_task}')
+    else:
+        return HttpResponse('Database up to date')
