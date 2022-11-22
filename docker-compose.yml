@@ -1,6 +1,26 @@
 version: '3.1'
 
 services:
+  web:
+    build: .
+    command: >
+      sh -c "python3 manage.py migrate &&
+             python3 manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file: .env
+    depends_on:
+      - db
+
+  celery_worker:
+    build: .
+    restart: always
+    hostname: celery_worker
+    environment:
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+    command: python -m celery -A BenzinCheck worker
 
   db:
     image: 'postgres'
