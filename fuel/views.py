@@ -7,15 +7,18 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.utils import timezone
 from django.shortcuts import render, redirect
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 
 from fuel import models, forms, tasks
 from utils import GetChoices
 
 
 # Create your views here.
+@cache_page(900)
 def index(request):
     """
-        start page with the filter and instruction to API service
+        Start page with the filter and instruction to API service
     :param request: request
     :return: html page
     """
@@ -41,6 +44,7 @@ def fuel_price_table(request):
     type_of_fuel = request.session.get('type_of_fuel')
     region = request.session.get('region')
     fuel_operator = request.session.get('fuel_operator')
+    cache_key = f'{type_of_fuel}_{region}_{fuel_operator}'
     filter_params = {}
     now_date = timezone.now().date()
     query = f"""select * from fuel_pricetable
@@ -55,8 +59,15 @@ def fuel_price_table(request):
         if filter_params:
             query += ' and ' + ' and '.join(list(f'{key}={value}' for key, value in filter_params.items()))
         data_from_db = models.PriceTable.objects.raw(query + ' ORDER BY id_fuel_id, id_region_id')
-        dict_data = [itm.to_dict() for itm in data_from_db]
-        paginator = Paginator(dict_data, 25)
+
+        # Create cache for data used cache_key
+        dict_data = cache.get(cache_key)
+        if not dict_data:
+            dict_data = [itm.to_dict() for itm in data_from_db]
+            cache.set(cache_key, dict_data, 900)
+
+        # Create paginator if the number of records is more than 50
+        paginator = Paginator(dict_data, 50)
         page_number = int(request.GET.get('page', default=1))
         if paginator.num_pages >= page_number and paginator.num_pages > 1:
             page_obj = paginator.page(page_number)
@@ -92,14 +103,18 @@ def fuel_data_handler(request, **kwargs):
         filter_params['id_fuel'] = get_id_fuel.id
     if 'id_region' in filter_params:
         try:
-            get_id_region = models.Region.objects.get(name=filter_params['id_region']).id
+            get_id_region = models.Region.objects.get(
+                name=filter_params['id_region'].capitalize()
+            ).id
             filter_params['id_region'] = get_id_region
         except Exception:
             json_data = json.dumps({'Error': 'Parameters are not correct'})
             return HttpResponse(json_data, content_type='application/json')
     else:
         try:
-            get_id_fuel_operator = models.FuelOperator.objects.get(name=filter_params['id_fuel_operator']).id
+            get_id_fuel_operator = models.FuelOperator.objects.get(
+                name=filter_params['id_fuel_operator'].capitalize()
+            ).id
             filter_params['id_fuel_operator'] = get_id_fuel_operator
         except Exception:
             json_data = json.dumps({'Error': 'Parameters are not correct'})
