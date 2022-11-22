@@ -1,0 +1,83 @@
+[
+{
+    "model": "fuel.fueloperator",
+    "pk": 1,
+    "fields": {
+        "name": "WOG",
+        "info": "Центр підтримки клієнтів\r\n0 800 300 525",
+        "official_site": "https://wog.ua"
+    }
+},
+{
+    "model": "fuel.fueloperator",
+    "pk": 2,
+    "fields": {
+        "name": "ОККО",
+        "info": "Гаряча лінія мережі АЗК \"ОККО\"\r\n\r\n    0 800 501 101 \r\n\r\nГаряча лінія Fishka\r\n\r\n0 800 505 118",
+        "official_site": "https://www.okko.ua/"
+    }
+},
+{
+    "model": "fuel.fueloperator",
+    "pk": 4,
+    "fields": {
+        "name": "Авиас",
+        "info": "Null",
+        "official_site": "https://avias.ua/"
+    }
+},
+{
+    "model": "fuel.fueloperator",
+    "pk": 5,
+    "fields": {
+        "name": "БРСМ-Нафта",
+        "info": "ГАРЯЧА ЛІНІЯ\n0 800 303 404\n\nЦЕНТРАЛЬНИЙ ОФІС:\nТОВ «Євро Смарт Пауер»\nУкраїна, Київ, 01042, вул. Чигоріна, 2\n\nТел.: (044)206-22-33\n\nEmail: info@brsm-nafta.com.ua",
+        "official_site": "https://brsm-nafta.com/"
+    }
+},
+{
+    "model": "fuel.fueloperator",
+    "pk": 6,
+    "fields": {
+        "name": "Авантаж 7",
+        "info": "Адрес: Відрадний проспект, 95-А2, Київ, 02000\nЧасы работы: \nОткрыто ⋅ Закроется в 18:00\nТелефон: 044 502 9908",
+        "official_site": "https://www.avantage7.com"
+    }
+},
+{
+    "model": "fuel.fueloperator",
+    "pk": 7,
+    "fields": {
+        "name": "Укрнафта",
+        "info": "E-mail: office@ukrnafta.com\nПРЕС-СЛУЖБА:\nE-mail: press@ukrnafta.com\nГАРЯЧА ЛІНІЯ ПАТ «УКРНАФТА»:\nТеl. 0 800 404 000\nE-mail: hotline@ukrnafta.com",
+        "official_site": "https://www.ukrnafta.com/"
+    }
+},
+{
+    "model": "fuel.fueloperator",
+    "pk": 8,
+    "fields": {
+        "name": "Shell",
+        "info": "Shell Retail Ukraine (ТОВ «Альянс Холдинг»)\nУправління та експлуатація мережі АЗС\nАдреса: вул. М. Грінченка, 4 (Horizon Park Business Center), Київ, 03038\n\nТелефон: +380 44 495 08 00\n\nФакс: +380 44 499 59 68\n\nГаряча лінія для клієнтів мережі АЗС Shell: 0 800 500 423\n\nЕлектронна пошта для відгуків про роботу АЗС та скарг клієнтів, а також для запитів ЗМІ: info.shell@acc.com.ua\n\nВідділ безготівкових розрахунків (паливні картки і талони, картки EuroShell): 0 800 307 502\n\nЕлектронна пошта для комерційних пропозицій: offers-ua@shell.com\n\nЕлектронна пошта для Ваших резюме: recruitment-ukraine@shell.com\n\nЗ питань купівлі, продажу, оренди АЗК чи АГЗП, інвестиційних пропозицій та розвитку дилерської мережі: GX-UKRAH-NETWORKPLANNING@shell.com\n\nЗ питань оренди вільних площ та приміщень: Наталія Лук’яненко (Nataliya.Lukianenko@shell.com) ",
+        "official_site": "https://www.ua.shell/"
+    }
+},
+{
+    "model": "fuel.fueloperator",
+    "pk": 9,
+    "fields": {
+        "name": "Chipo",
+        "info": "ТОВ «Поділлянафтозбут»\n21036, Україна\nм. Вінниця, вул. Миколи Амосова, 26а оф.401\n\nГаряча лінія – 0800 50 30 29\n(дзвінки безкоштовні в межах України)",
+        "official_site": "https://chipo.ua/uk/"
+    }
+},
+{
+    "model": "fuel.fueloperator",
+    "pk": 10,
+    "fields": {
+        "name": "Mango",
+        "info": "NULL",
+        "official_site": "NULL"
+    }
+}
+]

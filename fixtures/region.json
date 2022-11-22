@@ -1,0 +1,177 @@
+[
+{
+    "model": "fuel.region",
+    "pk": 1,
+    "fields": {
+        "name": "Вінницька"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 2,
+    "fields": {
+        "name": "Донецька"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 3,
+    "fields": {
+        "name": "Запорізька"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 4,
+    "fields": {
+        "name": "Кіровоградська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 5,
+    "fields": {
+        "name": "Харківська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 6,
+    "fields": {
+        "name": "Житомирська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 7,
+    "fields": {
+        "name": "Тернопільська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 8,
+    "fields": {
+        "name": "Хмельницька"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 9,
+    "fields": {
+        "name": "Львівська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 10,
+    "fields": {
+        "name": "Чернігівська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 11,
+    "fields": {
+        "name": "Сумська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 12,
+    "fields": {
+        "name": "Рівненська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 13,
+    "fields": {
+        "name": "Київська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 14,
+    "fields": {
+        "name": "Дніпровська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 15,
+    "fields": {
+        "name": "Одеська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 16,
+    "fields": {
+        "name": "Івано-Франківська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 17,
+    "fields": {
+        "name": "Кропивницька"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 18,
+    "fields": {
+        "name": "Луганська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 19,
+    "fields": {
+        "name": "Волинська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 20,
+    "fields": {
+        "name": "Миколаївська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 21,
+    "fields": {
+        "name": "Полтавська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 22,
+    "fields": {
+        "name": "Закарпатська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 23,
+    "fields": {
+        "name": "Черкаська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 24,
+    "fields": {
+        "name": "Херсонська"
+    }
+},
+{
+    "model": "fuel.region",
+    "pk": 25,
+    "fields": {
+        "name": "Чернівецька"
+    }
+}
+]

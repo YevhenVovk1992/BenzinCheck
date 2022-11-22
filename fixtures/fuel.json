@@ -1,0 +1,42 @@
+[
+{
+    "model": "fuel.fuel",
+    "pk": 1,
+    "fields": {
+        "name": "A95",
+        "type": "Petrol"
+    }
+},
+{
+    "model": "fuel.fuel",
+    "pk": 2,
+    "fields": {
+        "name": "A92",
+        "type": "Petrol"
+    }
+},
+{
+    "model": "fuel.fuel",
+    "pk": 3,
+    "fields": {
+        "name": "Diesel",
+        "type": "Diesel"
+    }
+},
+{
+    "model": "fuel.fuel",
+    "pk": 4,
+    "fields": {
+        "name": "Gas",
+        "type": "Gas"
+    }
+},
+{
+    "model": "fuel.fuel",
+    "pk": 6,
+    "fields": {
+        "name": "A95plus",
+        "type": "Petrol"
+    }
+}
+]
