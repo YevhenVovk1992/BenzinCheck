@@ -27,4 +27,17 @@
                 </tbody>
                 </table>
     </div>
+    <div class="paginator">
+        {% if paginator %}
+            <div class="card-body text-center">
+                <a class="btn btn-primary" href="?page={{ paginator.previous }}">Previous Page</a>
+            </div>
+            <div class="card-body text-center">
+                <p>{{ paginator.now }}/{{ paginator.all }}</p>
+            </div>
+            <div class="card-body text-center">
+                <a class="btn btn-primary" href="?page={{ paginator.next }}">Next Page</a>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
