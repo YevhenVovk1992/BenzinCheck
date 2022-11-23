@@ -13,6 +13,7 @@ services:
     env_file: .env
     depends_on:
       - db
+      - celery_worker
 
   celery_worker:
     build: .
@@ -20,7 +21,7 @@ services:
     hostname: celery_worker
     environment:
       CELERY_BROKER_URL: ${CELERY_BROKER_URL}
-    command: python -m celery -A BenzinCheck worker
+    command: celery -A BenzinCheck worker --beat --scheduler django --loglevel=info
 
   db:
     image: 'postgres'
