@@ -19,8 +19,7 @@ services:
     build: .
     restart: always
     hostname: celery_worker
-    environment:
-      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+    env_file: .env
     command: celery -A BenzinCheck worker --beat --scheduler django --loglevel=info
 
   db:
