@@ -8,16 +8,17 @@
     <link href={% static "fuel/css/style.css" %} rel="stylesheet" />
 </head>
 <body>
+<a href={% url 'start_page' %}>To the maine page</a>
 {% if user.is_superuser %}
    <div>
     <a href={% url 'logout' %}>Logout</a>
     <h1>Add new object to database</h1>
        <ul>
-          <li><button onclick=""><a href={% url 'add_data' form_obj='region' %}>Add region</a></button></li>
-          <li><button onclick=""><a href={% url 'add_data' form_obj='fuel' %}>Add fuel</a></button></li>
-          <li><button onclick=""><a href={% url 'add_data' form_obj='fuel_operator' %}>Add fuel operator</a></button></li>
-          <li><button onclick=""><a href={% url 'add_fuel_price' %}>Add fuel price for the fuel</a></button></li>
-           <li><button onclick=""><a href={% url 'update_data' %}>Update data now</a></button></li>
+          <li><a href={% url 'add_data' form_obj='region' %}><button onclick="">Add region</button></a></li>
+          <li><a href={% url 'add_data' form_obj='fuel' %}><button onclick="">Add fuel</button></a></li>
+          <li><a href={% url 'add_data' form_obj='fuel_operator' %}><button onclick="">Add fuel operator</button></a></li>
+          <li><a href={% url 'add_fuel_price' %}><button onclick="">Add fuel price for the fuel</button></a></li>
+           <li><a href={% url 'update_data' %}><button onclick="">Update data now</button></a></li>
         </ul>
     </div>
 {% else  %}
