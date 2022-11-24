@@ -2,7 +2,7 @@
 ### Get information about the price of fuel for your region or country. Use for it our websuite or REST API service.
 Link - 
 ___
-
+![Screenshot from 2022-11-23 12-14-28](https://user-images.githubusercontent.com/104986485/203813383-4865c00f-c7e2-4da9-b67b-1cb198fcbbd0.png)
 ___
 ### What we do?
 Technologies used: Djando, Django Unittest, Django crispy forms, DjangoORM, Celery Worker, Django baet, PostgresDB, Docker, Jinja2, HTML5, CSS, JS, Asyncio, Asyncpg, Beautifulsoup4, Aiohttp,  
