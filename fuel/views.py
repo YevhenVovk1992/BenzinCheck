@@ -136,10 +136,21 @@ def history_handler(request, **kwargs):
     filter_params = kwargs
     data_range = dict()
     now_data = timezone.now().date()
+
+    # Default timings
+    data_range['start_data'] = (now_data - timedelta(days=1))
+    data_range['end_data'] = now_data
+    filter_params['date__range'] = [data_range['start_data'], data_range['end_data']]
+
+    # Set timings if the user used them
     if request.GET:
         data_range['start_data'] = request.GET.get('start_data', now_data - timedelta(days=1))
         data_range['end_data'] = request.GET.get('end_data', now_data)
         filter_params['date__range'] = [data_range['start_data'], data_range['end_data']]
+        if 'fuel' in request.GET:
+            fuel_str = str(request.GET.get('fuel')).capitalize()
+            get_id_fuel = models.Fuel.objects.get(name=fuel_str)
+            filter_params['id_fuel'] = get_id_fuel.id
     if 'id_fuel_operator' in filter_params:
         try:
             get_id_fuel_operator = models.FuelOperator.objects.get(name=filter_params['id_fuel_operator']).id
