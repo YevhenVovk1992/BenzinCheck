@@ -15,7 +15,7 @@ from utils import GetChoices
 
 
 # Create your views here.
-@cache_page(900)
+
 def index(request):
     """
         Start page with the filter and instruction to API service
@@ -99,7 +99,8 @@ def fuel_data_handler(request, **kwargs):
     filter_params = kwargs
     filter_params['date'] = timezone.now().date()
     if request.GET and 'fuel' in request.GET:
-        get_id_fuel = models.Fuel.objects.get(name=request.GET.get('fuel'))
+        fuel_str = str(request.GET.get('fuel')).capitalize()
+        get_id_fuel = models.Fuel.objects.get(name=fuel_str)
         filter_params['id_fuel'] = get_id_fuel.id
     if 'id_region' in filter_params:
         try:

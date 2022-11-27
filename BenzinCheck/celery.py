@@ -15,8 +15,8 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 app.conf.beat_schedule = {
     'add-every-day-at-00-10': {
         'task': 'fuel.tasks.update_data_auto',
-        'schedule': crontab(hour='11',
-                            minute=5,
+        'schedule': crontab(hour='00',
+                            minute=10,
                             ),
         'args': ()
     },
