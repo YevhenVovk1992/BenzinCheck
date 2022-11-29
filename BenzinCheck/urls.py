@@ -22,6 +22,7 @@ from fuel import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('fuel/', include("fuel.urls")),
+    path('api/v1.0/', include("api_v10.urls")),
     path('login', views.user_login, name='login'),
     path('logout', views.user_logout, name='logout'),
     path('update_data', views.update_database, name='update_data'),

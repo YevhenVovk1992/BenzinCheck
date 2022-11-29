@@ -7,7 +7,6 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.utils import timezone
 from django.shortcuts import render, redirect
-from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 
 from fuel import models, forms, tasks
