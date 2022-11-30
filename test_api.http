@@ -1,0 +1,25 @@
+### GET request with a header
+GET http://127.0.0.1:8000/api/v1.0/price_today/
+Accept: application/json
+
+### Post
+POST http://127.0.0.1:8000/api/v1.0/price_today/
+Content-Type: application/json
+
+{
+  "id_fuel": 1,
+  "id_region": 1,
+  "id_fuel_operator": 1,
+  "price": 1
+}
+
+### update
+PUT http://127.0.0.1:8000/api/v1.0/price_today/region_Вінницька/fuel_A95/operator_WOG/
+Content-Type: application/json
+
+{
+  "id_fuel": "A92",
+  "id_region": "Запорізька",
+  "id_fuel_operator": "ОККО",
+  "price": 10000
+}
