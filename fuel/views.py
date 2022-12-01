@@ -64,7 +64,7 @@ def fuel_price_table(request):
         dict_data = cache.get(cache_key)
         if not dict_data:
             dict_data = [itm.to_dict() for itm in data_from_db]
-            cache.set(cache_key, dict_data, 120)
+            cache.set(cache_key, dict_data, 110)
 
         # Create paginator if the number of records is more than 50
         paginator = Paginator(dict_data, 50)
