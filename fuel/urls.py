@@ -22,8 +22,8 @@ urlpatterns = [
     path('add_<str:form_obj>', views.add_data, name='add_data'),
     path('fuel_price_add', views.add_fuel_price, name='add_fuel_price'),
     path('fuel_price_table', views.fuel_price_table, name='fuel_price_table'),
-    # path('region/<str:id_region>', views.fuel_data_handler, name='fuel_in_region'),
-    # path('fuel_operator/<str:id_fuel_operator>', views.fuel_data_handler, name='fuel_in_region'),
-    # path('history/region/<str:id_region>', views.history_handler, name='history_region'),
-    # path('history/fuel_operator/<str:id_fuel_operator>', views.history_handler, name='history_fuel_operator')
+    path('region/<str:id_region>', views.fuel_data_handler, name='fuel_in_region'),
+    path('fuel_operator/<str:id_fuel_operator>', views.fuel_data_handler, name='fuel_in_region'),
+    path('history/region/<str:id_region>', views.history_handler, name='history_region'),
+    path('history/fuel_operator/<str:id_fuel_operator>', views.history_handler, name='history_fuel_operator')
 ]

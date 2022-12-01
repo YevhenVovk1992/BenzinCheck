@@ -1,18 +1,18 @@
-import asyncio
+from pathlib import Path
+
 from django.utils import timezone
 
-import celery
 from celery import shared_task
-
-from utils.parser import main
+from subprocess import call
 from fuel import models
 
 
 @shared_task()
 def update_data(date):
     print('Start task update data')
+    file_dir = str(Path(__file__).resolve().parent.parent) + '/utils/parser.py'
     try:
-        asyncio.get_event_loop().run_until_complete(main())
+        call(["python3", file_dir])
         status = models.UpdateDatabase.objects.filter(run_date=date).first()
         status.status = 'Done'
         status.save()
