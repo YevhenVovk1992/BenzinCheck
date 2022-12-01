@@ -60,13 +60,16 @@
                     <p>Parameter --region--. Here you need to specify the search region. The region is written in Ukraine.
                   You can check the spelling on the website form for correct spelling.</p>
                    <p>Parameter --fuel_operator--. Write the name of the gas station as indicated on their official website.</p>
+                    <p>Parameter --fuel--. Write the type of fuel. For gasoline A95 or A92, for diesel - diesel, for gas - gas.</p>
                     <p>For example:</p>
-                  <code>http://http://127.0.0.1:8000/fuel/history/region/Сумська</code>
+                  <code>http://127.0.0.1:8000/fuel/history/region/Сумська</code>
                     <p>Get prices for the last 2 days for the region Sumy</p>
                    <code>http://127.0.0.1:8000/fuel/history/fuel_operator/WOG?start_data=2022-11-16</code>
                     <p>In this example, we get data on WOG fuel station in th period from 2022-11-16 to today.</p>
                     <code>http://127.0.0.1:8000/fuel/history/region/Вінницька?start_data=2022-11-15&end_data=2022-11-17</code>
                     <p>Get prices in the period from 2022-11-15 to 2022-11-17 for the region Vinnitsiy</p>
+                    <code>http://127.0.0.1:8000/fuel/history/region/львівська?start_data=2022-11-10&end_data=2022-11-30&fuel=Gas</code>
+                    <p>Get prices in the period from 2022-11-10 to 2022-11-30 for the region Lviv</p>
 
                </div>
             </section>

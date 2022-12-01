@@ -64,7 +64,7 @@ def fuel_price_table(request):
         dict_data = cache.get(cache_key)
         if not dict_data:
             dict_data = [itm.to_dict() for itm in data_from_db]
-            cache.set(cache_key, dict_data, 900)
+            cache.set(cache_key, dict_data, 120)
 
         # Create paginator if the number of records is more than 50
         paginator = Paginator(dict_data, 50)
@@ -114,9 +114,10 @@ def fuel_data_handler(request, **kwargs):
     else:
         try:
             get_id_fuel_operator = models.FuelOperator.objects.get(
-                name=filter_params['id_fuel_operator'].capitalize()
-            ).id
-            filter_params['id_fuel_operator'] = get_id_fuel_operator
+                name=filter_params['id_fuel_operator']
+            )
+            print(get_id_fuel_operator)
+            filter_params['id_fuel_operator'] = get_id_fuel_operator.id
         except Exception:
             json_data = json.dumps({'Error': 'Parameters are not correct'})
             return HttpResponse(json_data, content_type='application/json')
@@ -160,7 +161,7 @@ def history_handler(request, **kwargs):
             return HttpResponse(json_data, content_type='application/json')
     else:
         try:
-            get_id_region = models.Region.objects.get(name=filter_params['id_region']).id
+            get_id_region = models.Region.objects.get(name=filter_params['id_region'].capitalize()).id
             filter_params['id_region'] = get_id_region
         except Exception:
             json_data = json.dumps({'Error': 'Parameters are not correct'})
