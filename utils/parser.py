@@ -7,7 +7,7 @@ import logging
 from bs4 import BeautifulSoup
 from pathlib import Path
 
-from utils.GetEnviromentVariable import get_environment_variables
+from GetEnviromentVariable import get_environment_variables
 
 
 base_dir = str(Path(__file__).resolve().parent.parent)
