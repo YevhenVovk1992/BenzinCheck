@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crispy_forms',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
     'fuel.apps.FuelConfig'
 ]
 
@@ -143,4 +145,14 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': os.path.join(BASE_DIR, 'site_cache'),
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_RENDER_CLASSES': (
+        'rest_framework.render.JsonRender',
+        'rest_framework.render.BrowsableAPIRender',
+    ),
 }
