@@ -24,6 +24,8 @@ urlpatterns = [
     path('fuel/', include(fuel_router.urls)),
     path('region/', include(region_router.urls)),
     path('operator/', include(operator_router.urls)),
+    path('history/<str:start_date>', views.HistoryPriceAPIGet.as_view()),
+    path('history/<str:start_date>/<str:end_date>', views.HistoryPriceAPIGet.as_view())
 
 ]
 

@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django.shortcuts import render
 from django.utils import timezone
@@ -13,10 +13,7 @@ from api_v10 import serializer, permissions
 
 
 # Create your views here.
-class PriceAPIGet(generics.ListCreateAPIView):
-    serializer_class = serializer.PriceSerializer
-    permission_classes = (permissions.IsAdminOrReadOnly, )
-
+class QueryParamsMixin:
     def get_query_params(self):
         filter_params = dict()
         for key, value in dict(self.request.query_params.items()).items():
@@ -30,6 +27,11 @@ class PriceAPIGet(generics.ListCreateAPIView):
                 elif key == 'region' and value.isdigit():
                     filter_params['id_region'] = int(value)
         return filter_params
+
+
+class PriceAPIGet(generics.ListCreateAPIView, QueryParamsMixin):
+    serializer_class = serializer.PriceSerializer
+    permission_classes = (permissions.IsAdminOrReadOnly,)
 
     def get_queryset(self):
         query_params = self.get_query_params()
@@ -48,7 +50,7 @@ class PriceAPIGet(generics.ListCreateAPIView):
 class PriceAPIUpdate(generics.RetrieveUpdateAPIView):
     queryset = models.PriceTable.objects.filter(date=timezone.now().date()).all()
     serializer_class = serializer.PriceSerializer
-    permission_classes = (IsAdminUser, )
+    permission_classes = (IsAdminUser,)
 
 
 class PriceAPIDestroy(generics.DestroyAPIView):
@@ -56,73 +58,6 @@ class PriceAPIDestroy(generics.DestroyAPIView):
     serializer_class = serializer.PriceSerializer
     permission_classes = (IsAdminUser,)
 
-
-# class PriceAPIView(APIView):
-#     def get_params(self, get_request=False, **kwargs):
-#         region = kwargs.get('region', None)
-#         fuel = kwargs.get('fuel', None)
-#         fuel_operator = kwargs.get('fuel_operator', None)
-#         if (not region or not fuel or not fuel_operator) and not get_request:
-#             return Response({'error': 'Update method not allowed'})
-#         return {'region': region, 'fuel': fuel, 'fuel_operator': fuel_operator}
-#
-#     def get(self, request, **kwargs):
-#         date_now = timezone.now().date()
-#         filter = {}
-#         params = self.get_params(get_request=True, **kwargs)
-#
-#         if params['fuel'] is not None:
-#             filter['id_fuel'] = models.Fuel.objects.filter(name=params['fuel']).first()
-#         if params['region'] is not None:
-#             filter['id_region'] = models.Fuel.objects.filter(name=params['region']).first()
-#         if params['fuel_operator'] is not None:
-#             filter['id_fuel_operator'] = models.Fuel.objects.filter(name=params['fuel_operator']).first()
-#
-#         obj = models.PriceTable.objects.filter(date=date_now, **filter).all()
-#
-#         if not obj:
-#             Response({'Price_get': 'Database not update'})
-#         return Response({'Price_get': serializer.PriceSerializer(obj, many=True).data})
-#
-#     def post(self, request):
-#         date_now = timezone.now().date()
-#         model_serializer = serializer.PriceSerializer(data=request.data)
-#         if model_serializer.is_valid(raise_exception=True):
-#             model_serializer.save(date=date_now)
-#             return Response({'Price_post': model_serializer.data})
-#
-#     def put(self, request, **kwargs):
-#         date_now = timezone.now().date()
-#         params = self.get_params(**kwargs)
-#         try:
-#             instance = models.PriceTable.objects.filter(
-#                 id_fuel=models.Fuel.objects.filter(name=params['fuel']).first(),
-#                 id_region=models.Region.objects.filter(name=params['region']).first(),
-#                 id_fuel_operator=models.FuelOperator.objects.filter(name=params['fuel_operator']).first(),
-#                 date=date_now
-#             ).first()
-#         except Exception as error:
-#             return Response({'error': error})
-#         model_serializer = serializer.PriceSerializer(data=request.data, instance=instance)
-#         if model_serializer.is_valid():
-#             model_serializer.save(date=date_now)
-#             return Response({'Price_post': model_serializer.data})
-#
-#     def delete(self, request, **kwargs):
-#         params = self.get_params(**kwargs)
-#         try:
-#             instance = models.PriceTable.objects.filter(
-#                 id_fuel=models.Fuel.objects.filter(name=params['fuel']).first(),
-#                 id_region=models.Region.objects.filter(name=params['region']).first(),
-#                 id_fuel_operator=models.FuelOperator.objects.filter(name=params['fuel_operator']).first(),
-#                 date=timezone.now().date()
-#             ).first()
-#         except Exception as error:
-#             return Response({'error': error})
-#         id_instance = instance.id
-#         instance.delete()
-#         return Response({'Price_delete': id_instance})
-#
 
 class FuelViewSets(viewsets.ReadOnlyModelViewSet):
     queryset = models.Fuel.objects.all()
@@ -138,3 +73,25 @@ class RegionViewSets(viewsets.ReadOnlyModelViewSet):
     queryset = models.Region.objects.all()
     serializer_class = serializer.RegionSerializer
 
+
+class HistoryPriceAPIGet(generics.ListAPIView, QueryParamsMixin):
+    serializer_class = serializer.HistoryPriceSerializer
+
+    def get_queryset(self):
+        filter_params = dict()
+        now_data = datetime.now().date()
+        query_params = self.get_query_params()
+        start_date = self.kwargs.get('start_date', None)
+        end_date = self.kwargs.get('end_date', None)
+
+        # Default timings
+        filter_params['date__range'] = [datetime.strptime(start_date, '%Y-%m-%d').date(), now_data]
+        if end_date:
+            filter_params['date__range'] = [
+                datetime.strptime(start_date, '%Y-%m-%d').date(),
+                datetime.strptime(end_date, '%Y-%m-%d').date()
+            ]
+        queryset = models.PriceTable.objects.filter(**filter_params).order_by('date').all()
+        if query_params:
+            queryset = models.PriceTable.objects.filter(**filter_params, **query_params).all()
+        return queryset
