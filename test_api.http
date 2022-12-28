@@ -7,24 +7,48 @@ POST http://127.0.0.1:8000/api/v1.0/price_today/
 Content-Type: application/json
 
 {
-  "id_fuel": "Gas",
-  "id_region": "Київська",
-  "id_fuel_operator": "ОККО",
+  "id_fuel": 1,
+  "id_region": 1,
+  "id_fuel_operator": 1,
   "price": 1000
 }
 
 ### update
-PUT http://127.0.0.1:8000/api/v1.0/price_today/region_Київська/fuel_Gas/operator_ОККО/
+PUT http://127.0.0.1:8000/api/v1.0/price_today/update/14286
 Content-Type: application/json
+Authorization: Token d76917a49bbf11c9600650a73d10c6af5314a029
 
 {
-  "id_fuel": "A92",
-  "id_region": "Запорізька",
-  "id_fuel_operator": "ОККО",
-  "price": 11000
+  "id_fuel": 6,
+  "id_region": 1,
+  "id_fuel_operator": 2,
+  "price": 314000
 }
 
 ### delete
-DELETE http://127.0.0.1:8000/api/v1.0/price_today/region_Запорізька/fuel_A92/operator_ОККО/
+DELETE http://127.0.0.1:8000/api/v1.0/price_today/price_today/delete/14281
 Content-Type: application/json
 
+### POST request create user
+POST http://127.0.0.1:8000/api/v1.0/auth/users/
+Accept: application/json
+
+{
+  "username": "jsonuser",
+  "password": "gfhgjgjghj-12345",
+  "email": "test@tsest.ru"
+}
+
+### POST request login
+POST http://127.0.0.1:8000/api/v1.0/auth_token/token/login/
+Accept: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+### POST request logour
+POST http://127.0.0.1:8000/api/v1.0/auth_token/token/logout/
+Accept: application/json
+Authorization: Token d76917a49bbf11c9600650a73d10c6af5314a029

@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.shortcuts import render
 from django.utils import timezone
 from rest_framework import generics, viewsets, request
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAdminUser
@@ -17,8 +18,18 @@ class PriceAPIGet(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAdminOrReadOnly, )
 
     def get_query_params(self):
-        query_params = dict(self.request.query_params.items())
-        return query_params
+        filter_params = dict()
+        for key, value in dict(self.request.query_params.items()).items():
+            if key not in ('fuel', 'region', 'operator'):
+                return None
+            else:
+                if key == 'fuel' and value.isdigit():
+                    filter_params['id_fuel'] = int(value)
+                elif key == 'operator' and value.isdigit():
+                    filter_params['id_fuel_operator'] = int(value)
+                elif key == 'region' and value.isdigit():
+                    filter_params['id_region'] = int(value)
+        return filter_params
 
     def get_queryset(self):
         query_params = self.get_query_params()
@@ -30,7 +41,7 @@ class PriceAPIGet(generics.ListCreateAPIView):
                 id=get_id
             ).all()
         if query_params:
-            pass
+            queryset = models.PriceTable.objects.filter(date=timezone.now().date(), **query_params).all()
         return queryset
 
 
@@ -113,8 +124,17 @@ class PriceAPIDestroy(generics.DestroyAPIView):
 #         return Response({'Price_delete': id_instance})
 #
 
-class HistoryPriceViewSets(viewsets.ReadOnlyModelViewSet):
-    queryset = models.PriceTable.objects.all()
-    serializer_class = serializer.HistoryPriceSerializer
+class FuelViewSets(viewsets.ReadOnlyModelViewSet):
+    queryset = models.Fuel.objects.all()
+    serializer_class = serializer.FuelSerializer
 
+
+class FuelOperatorViewSets(viewsets.ReadOnlyModelViewSet):
+    queryset = models.FuelOperator.objects.all()
+    serializer_class = serializer.FuelOperatorSerializer
+
+
+class RegionViewSets(viewsets.ReadOnlyModelViewSet):
+    queryset = models.Region.objects.all()
+    serializer_class = serializer.RegionSerializer
 

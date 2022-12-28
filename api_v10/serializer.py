@@ -4,6 +4,24 @@ from rest_framework import serializers
 from fuel import models
 
 
+class FuelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Fuel
+        fields = '__all__'
+
+
+class FuelOperatorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.FuelOperator
+        fields = '__all__'
+
+
+class RegionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Region
+        fields = '__all__'
+
+
 class PriceSerializer(serializers.ModelSerializer):
     date = serializers.DateField(read_only=True)
 
@@ -18,11 +36,10 @@ class PriceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.PriceTable
-        fields = ('id', 'id_fuel', 'id_region', 'id_fuel_operator', 'date', 'price')
+        fields = '__all__'
 
 
 class HistoryPriceSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = models.PriceTable
         fields = ('id', 'id_fuel', 'id_region', 'id_fuel_operator', 'date', 'price')
