@@ -25,7 +25,7 @@ def index(request):
     if request.method == 'GET':
         data = {
             'title': 'Add Price',
-            'fuel_choices': GetChoices.Choices.fuel_choices(nothing=True),
+            'fuel_choices': GetChoices.Choices.fuel_choices(),
             'fuel_operator_choices': GetChoices.Choices.fuel_operator_choices(nothing=True),
             'region_choices': GetChoices.Choices.region_choices(nothing=True)
         }
@@ -48,7 +48,10 @@ def fuel_price_table(request):
     filter_params = {}
     now_date = timezone.now().date()
     query = f"""select * from fuel_pricetable
-             where date='{now_date}'"""
+                join fuel_fuel on fuel_pricetable.id_fuel_id = fuel_fuel.id
+                join fuel_fueloperator on fuel_pricetable.id_fuel_operator_id = fuel_fueloperator.id
+                join fuel_region on fuel_pricetable.id_region_id = fuel_region.id
+                where date='{now_date}'"""
     if type_of_fuel != '0':
         filter_params['id_fuel_id'] = type_of_fuel
     if region != '0':
@@ -122,51 +125,6 @@ def fuel_data_handler(request, **kwargs):
             json_data = json.dumps({'Error': 'Parameters are not correct'})
             return HttpResponse(json_data, content_type='application/json')
     fuel = models.PriceTable.objects.filter(**filter_params).all()
-    json_data = json.dumps([itm.to_dict() for itm in fuel])
-    return HttpResponse(json_data, content_type='application/json')
-
-
-def history_handler(request, **kwargs):
-    """
-        API. Get data from history by region or fuel operator
-        test URL - http://127.0.0.1:8000/fuel/history/region-1?start_data=2022-11-12&end_data=2022-11-13
-    :param request: request
-    :param kwargs: region or fuel_operator
-    :return: json
-    """
-    filter_params = kwargs
-    data_range = dict()
-    now_data = timezone.now().date()
-
-    # Default timings
-    data_range['start_data'] = (now_data - timedelta(days=1))
-    data_range['end_data'] = now_data
-    filter_params['date__range'] = [data_range['start_data'], data_range['end_data']]
-
-    # Set timings if the user used them
-    if request.GET:
-        data_range['start_data'] = request.GET.get('start_data', now_data - timedelta(days=1))
-        data_range['end_data'] = request.GET.get('end_data', now_data)
-        filter_params['date__range'] = [data_range['start_data'], data_range['end_data']]
-        if 'fuel' in request.GET:
-            fuel_str = str(request.GET.get('fuel')).capitalize()
-            get_id_fuel = models.Fuel.objects.get(name=fuel_str)
-            filter_params['id_fuel'] = get_id_fuel.id
-    if 'id_fuel_operator' in filter_params:
-        try:
-            get_id_fuel_operator = models.FuelOperator.objects.get(name=filter_params['id_fuel_operator']).id
-            filter_params['id_fuel_operator'] = get_id_fuel_operator
-        except Exception:
-            json_data = json.dumps({'Error': 'Parameters are not correct'})
-            return HttpResponse(json_data, content_type='application/json')
-    else:
-        try:
-            get_id_region = models.Region.objects.get(name=filter_params['id_region'].capitalize()).id
-            filter_params['id_region'] = get_id_region
-        except Exception:
-            json_data = json.dumps({'Error': 'Parameters are not correct'})
-            return HttpResponse(json_data, content_type='application/json')
-    fuel = models.PriceTable.objects.filter(**filter_params).order_by('date').all()
     json_data = json.dumps([itm.to_dict() for itm in fuel])
     return HttpResponse(json_data, content_type='application/json')
 
