@@ -1,5 +1,3 @@
-import json
-
 from datetime import timedelta
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -7,7 +5,6 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.utils import timezone
 from django.shortcuts import render, redirect
-from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 
 from fuel import models, forms, tasks
@@ -41,92 +38,56 @@ def index(request):
 
 
 def fuel_price_table(request):
+    now_date = timezone.now().date()
     type_of_fuel = request.session.get('type_of_fuel')
     region = request.session.get('region')
     fuel_operator = request.session.get('fuel_operator')
     cache_key = f'{type_of_fuel}_{region}_{fuel_operator}'
-    filter_params = {}
-    now_date = timezone.now().date()
-    query = f"""select * from fuel_pricetable
-                join fuel_fuel on fuel_pricetable.id_fuel_id = fuel_fuel.id
-                join fuel_fueloperator on fuel_pricetable.id_fuel_operator_id = fuel_fueloperator.id
-                join fuel_region on fuel_pricetable.id_region_id = fuel_region.id
-                where date='{now_date}'"""
+    filter_params = {'date': now_date}
     if type_of_fuel != '0':
         filter_params['id_fuel_id'] = type_of_fuel
     if region != '0':
         filter_params['id_region_id'] = region
     if fuel_operator != '0':
         filter_params['id_fuel_operator_id'] = fuel_operator
-    if all(filter_params.values()):
-        if filter_params:
-            query += ' and ' + ' and '.join(list(f'{key}={value}' for key, value in filter_params.items()))
-        data_from_db = models.PriceTable.objects.raw(query + ' ORDER BY id_fuel_id, id_region_id')
+    query_to_db = models.PriceTable.objects.filter(**filter_params). \
+        select_related('id_fuel', 'id_region', 'id_fuel_operator'). \
+        values('id_fuel__name', 'id_region__name', 'id_fuel_operator__name', 'price', 'date'). \
+        order_by('id_fuel__name')
 
-        # Create cache for data used cache_key
-        dict_data = cache.get(cache_key)
-        if not dict_data:
-            dict_data = [itm.to_dict() for itm in data_from_db]
-            cache.set(cache_key, dict_data, 110)
+    # Create cache for data used cache_key
+    dict_data = cache.get(cache_key)
+    if not dict_data:
+        dict_data = []
+        for itm in query_to_db:
+            dict_data.append({
+                'fuel': itm.get('id_fuel__name'),
+                'region': itm.get('id_region__name'),
+                'fuel operator': itm.get('id_fuel_operator__name'),
+                'data': itm.get('date'),
+                'price': itm.get('price')
+            })
+        cache.set(cache_key, dict_data, 30)
 
-        # Create paginator if the number of records is more than 50
-        paginator = Paginator(dict_data, 50)
-        page_number = int(request.GET.get('page', default=1))
-        if paginator.num_pages >= page_number and paginator.num_pages > 1:
-            page_obj = paginator.page(page_number)
-            all_pages = paginator.num_pages
-            next_page = page_obj.next_page_number() if page_number < paginator.num_pages else paginator.num_pages
-            previous_page = page_obj.previous_page_number() if page_number > 1 else 1
-            data = {
-                'title': 'Price table',
-                'paginator': {'next': next_page, 'previous': previous_page, 'all': all_pages, 'now': page_number},
-                'info': page_obj
-            }
-        else:
-            data = {
-                'title': 'Price table',
-                'info': dict_data
-            }
-        return render(request, 'fuel/fuel_price_table.html', data)
+    # Create paginator if the number of records is more than 50
+    paginator = Paginator(dict_data, 50)
+    page_number = int(request.GET.get('page', default=1))
+    if paginator.num_pages >= page_number and paginator.num_pages > 1:
+        page_obj = paginator.page(page_number)
+        all_pages = paginator.num_pages
+        next_page = page_obj.next_page_number() if page_number < paginator.num_pages else paginator.num_pages
+        previous_page = page_obj.previous_page_number() if page_number > 1 else 1
+        data = {
+            'title': 'Price table',
+            'paginator': {'next': next_page, 'previous': previous_page, 'all': all_pages, 'now': page_number},
+            'info': page_obj
+        }
     else:
-        return HttpResponse(status=404)
-
-
-def fuel_data_handler(request, **kwargs):
-    """
-        API. Get data by region or fuel operator
-    :param request: request
-    :param kwargs: region or fuel_operator
-    :return: json
-    """
-    filter_params = kwargs
-    filter_params['date'] = timezone.now().date()
-    if request.GET and 'fuel' in request.GET:
-        fuel_str = str(request.GET.get('fuel')).capitalize()
-        get_id_fuel = models.Fuel.objects.get(name=fuel_str)
-        filter_params['id_fuel'] = get_id_fuel.id
-    if 'id_region' in filter_params:
-        try:
-            get_id_region = models.Region.objects.get(
-                name=filter_params['id_region'].capitalize()
-            ).id
-            filter_params['id_region'] = get_id_region
-        except Exception:
-            json_data = json.dumps({'Error': 'Parameters are not correct'})
-            return HttpResponse(json_data, content_type='application/json')
-    else:
-        try:
-            get_id_fuel_operator = models.FuelOperator.objects.get(
-                name=filter_params['id_fuel_operator']
-            )
-            print(get_id_fuel_operator)
-            filter_params['id_fuel_operator'] = get_id_fuel_operator.id
-        except Exception:
-            json_data = json.dumps({'Error': 'Parameters are not correct'})
-            return HttpResponse(json_data, content_type='application/json')
-    fuel = models.PriceTable.objects.filter(**filter_params).all()
-    json_data = json.dumps([itm.to_dict() for itm in fuel])
-    return HttpResponse(json_data, content_type='application/json')
+        data = {
+            'title': 'Price table',
+            'info': dict_data
+        }
+    return render(request, 'fuel/fuel_price_table.html', data)
 
 
 @login_required(login_url='login')
