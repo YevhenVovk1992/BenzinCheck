@@ -1,14 +1,15 @@
 {% extends 'fuel/base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block content %}
     <div id="root">
         <h1>Log in</h1>
         <div class="form">
-            <form method="POST">
+            <form class="" method="POST">
               {% csrf_token %}
-              {{ form.as_p }}
-              <button type="submit">Log In</button>
+              {{ form | crispy }}
+              <button type="submit" class="button-click">Log In</button>
             </form>
         </div>
         <div id="messages">

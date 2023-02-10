@@ -96,6 +96,7 @@ def get_api_info(request):
     }
     return render(request, 'fuel/API_instruction.html', data)
 
+
 @login_required(login_url='login')
 def add_data(request, form_obj):
     """

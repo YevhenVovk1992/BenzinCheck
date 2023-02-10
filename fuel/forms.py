@@ -1,5 +1,5 @@
 from django import forms
-
+from django.contrib.auth.models import User
 
 from fuel import models
 
@@ -32,5 +32,16 @@ class FuelOperatorForm(forms.ModelForm):
 
 
 class UserLogin(forms.Form):
-    username = forms.CharField(max_length=120, label='Name')
-    password = forms.CharField(max_length=50, widget=forms.PasswordInput())
+    username = forms.CharField(
+        max_length=120,
+        label='Name',
+        widget=forms.TextInput(attrs={'class': 'form__input', })
+    )
+    password = forms.CharField(
+        max_length=50,
+        widget=forms.PasswordInput(attrs={'class': 'form__input', }),
+    )
+
+    class Meta:
+        model = User
+        fields = ('username', 'password')
