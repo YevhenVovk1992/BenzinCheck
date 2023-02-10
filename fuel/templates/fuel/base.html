@@ -6,24 +6,33 @@
     <meta charset="UTF-8">
     <title>{{title}}</title>
     <link href={% static "fuel/css/style.css" %} rel="stylesheet" />
+    <link href='https://fonts.googleapis.com/css?family=Oswald:300' rel='stylesheet' type='text/css'>
 </head>
 <body>
-<a href={% url 'start_page' %}>To the maine page</a>
-{% if user.is_superuser %}
-   <div>
-    <a href={% url 'logout' %}>Logout</a>
-    <h1>Add new object to database</h1>
-       <ul>
-          <li><a href={% url 'add_data' form_obj='region' %}><button onclick="">Add region</button></a></li>
-          <li><a href={% url 'add_data' form_obj='fuel' %}><button onclick="">Add fuel</button></a></li>
-          <li><a href={% url 'add_data' form_obj='fuel_operator' %}><button onclick="">Add fuel operator</button></a></li>
-          <li><a href={% url 'add_fuel_price' %}><button onclick="">Add fuel price for the fuel</button></a></li>
-           <li><a href={% url 'update_data' %}><button onclick="">Update data now</button></a></li>
-        </ul>
-    </div>
-{% else %}
-    <a href={% url 'login' %}>Login</a>
-{% endif %}
+<!-- #Menu -->
+    <h1 id="top_text">BenzinCheck</h1>
+    <nav class="style-1">
+		<a href="{% url 'start_page' %}" class="btn">Home</a>
+		<a href={% url 'api_info' %} class="btn">API</a>
+        {% if user.is_superuser %}
+            <a href="{% url 'logout' %}" class="btn">Logout</a>
+        {% else %}
+            <a href={% url 'login' %} class="btn">Login</a>
+        {% endif %}
+    </nav>
+
+    {% if user.is_superuser %}
+        <nav class="style-1">
+
+            <a href={% url 'add_data' form_obj='region' %} class="btn">Add fuel</a>
+            <a href={% url 'add_data' form_obj='fuel_operator' %} class="btn">Add fuel operator</a>
+            <h2>Hello SuperUser!</h2>
+            <a href={% url 'add_fuel_price' %} class="btn">Add fuel price for the fuel</a>
+            <a href={% url 'update_data' %} class="btn">Update data now</a>
+        	</nav>
+    {% endif %}
+    <div class="spacer"></div>
+
 {% block content %}
 
 {% endblock %}
