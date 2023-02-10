@@ -24,5 +24,5 @@ urlpatterns = [
     path('fuel/', include("fuel.urls")),
     path('login', views.user_login, name='login'),
     path('logout', views.user_logout, name='logout'),
-    path('update_data', views.update_database, name='update_data'),
+    path('update_data', views.update_database, name='update_data')
 ]

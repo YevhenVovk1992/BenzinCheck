@@ -90,6 +90,12 @@ def fuel_price_table(request):
     return render(request, 'fuel/fuel_price_table.html', data)
 
 
+def get_api_info(request):
+    data = {
+        'title': 'API info'
+    }
+    return render(request, 'fuel/API_instruction.html', data)
+
 @login_required(login_url='login')
 def add_data(request, form_obj):
     """

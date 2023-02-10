@@ -1,0 +1,60 @@
+{% extends 'fuel/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div id="root">
+        <section id="text_info">
+           <h2>How to make an API call?</h2>
+           <p>API call:</p>
+           <div class="api">
+              <code>http://host/api/v1.0/price_today</code><br>
+              <code>http://host/api/v1.0/price_today/-id:number-</code><br>
+              <code>http://host/api/v1.0/price_today/update/-id:number-</code><br>
+              <code>http://host/api/v1.0/price_today/delete/-id:number-</code><br>
+              <code>http://host/api/v1.0/price_today/fuel/list_fuel</code><br>
+              <code>http://host/api/v1.0/price_today/region/list_region</code><br>
+              <code>http://host/api/v1.0/price_today/operator/list_operator</code><br>
+           </div>
+           <div class="info-board">
+              <p>Parameter --id-- is an integer. This is ID of the one record. It provides data on the price of the fuel of a certain type,
+                  at certain gas station, on certain date, and in a certain area.
+                  If you have an access token, the record can be edited or deleted.<br>
+
+                Here you need to specify the search region. The region is written in Ukraine.
+                You can check the spelling on the website form for correct spelling.<br>
+                Parameter --fuel_operator--. Write the name of the gas station as indicated on their official website.<br>
+                Parameter --fuel--. Write the type of fuel. For gasoline A95 or A92, for diesel - diesel, for gas - gas.
+                This URL will turn you a JSON file with fuel prices in the area.
+                Additional query parameter --fuel-- used to filter by fuel type.<br>
+                For example:
+               <p><code>http://127.0.0.1:8000/fuel/region/Сумська</code></p>
+               <p>Get the price of fuel in Sumy region</p>
+               <code>http://127.0.0.1:8000/fuel/region/Сумська?fuel=A95</code>
+                <p>Get the price of fuel in Sumy region only for A95 fuel</p>
+           </div>
+           <h2>How to get price history?</h2>
+           <div class="info-board">
+              <code>http://host/fuel/history/--region--or--fuel_operator--/--name region--or--name operator--?start_data=yyyy-mm-dd&end_data=yyyy-mm-dd</code>
+              <p>By default you can view the history for the last 2 days.
+                  To get history for a period you need to use the query parameter: --start_data-- and --end_data--.
+                  Parameter --region--. Here you need to specify the search region. The region is written in Ukraine.
+                  You can check the spelling on the website form for correct spelling.<br>
+                  Parameter --fuel_operator--. Write the name of the gas station as indicated on their official website. <br>
+                  Parameter --fuel--. Write the type of fuel. For gasoline A95 or A92, for diesel - diesel, for gas - gas.</p>
+                  For example:
+               <p><code>http://127.0.0.1:8000/fuel/history/region/Сумська</code></p>
+               <p>Get prices for the last 2 days for the region Sumy</p>
+               <p><code>http://127.0.0.1:8000/fuel/history/fuel_operator/WOG?start_data=2022-11-16</code></p>
+               <p>In this example, we get data on WOG fuel station in th period from 2022-11-16 to today.</p>
+               <code>http://127.0.0.1:8000/fuel/history/region/Вінницька?start_data=2022-11-15&end_data=2022-11-17</code>
+               <p>Get prices in the period from 2022-11-15 to 2022-11-17 for the region Vinnitsiy</p>
+               <code>http://127.0.0.1:8000/fuel/history/region/львівська?start_data=2022-11-10&end_data=2022-11-30&fuel=Gas</code>
+               <p>Get prices in the period from 2022-11-10 to 2022-11-30 for the region Lviv</p>
+
+           </div>
+        </section>
+    </div>
+    <div id="messages">
+
+    </div>
+{% endblock %}

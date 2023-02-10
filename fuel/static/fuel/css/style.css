@@ -25,6 +25,11 @@ h3 {
     text-shadow: 5px 15px 6px rgba(150, 150, 150, 0.8);
 }
 
+#text_info {
+    width: 70%;
+    font-family: arial;
+}
+
 #root {
     display: flex;
     flex-direction: column;
@@ -78,6 +83,12 @@ h3 {
     font-size: 16px;
     font-weight: 400;
     margin-top: 5px;
+}
+
+code {
+    font-size: 18px;
+    color: #040000;
+    text-shadow: 1px 1px 2px white;
 }
 
 .form {
