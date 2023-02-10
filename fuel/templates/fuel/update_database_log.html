@@ -1,0 +1,12 @@
+{% extends 'fuel/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div id="root">
+        <h1>Status</h1>
+        <h3>Database up to date</h3>
+        {% for row in message %}
+            <p>{{ row }}</p>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,3 +1,4 @@
+import os.path
 from datetime import timedelta
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -215,5 +216,6 @@ def update_database(request):
         except Exception:
             return HttpResponse('Not connection to the database')
         return HttpResponse(f'Start process {id_task}')
-    else:
-        return HttpResponse('Database up to date')
+    with open(os.path.abspath('logs/parser_file.log'), 'r') as log:
+        message = log.readlines()
+    return render(request, 'fuel/update_database_log.html', {'message': message})
