@@ -12,7 +12,6 @@ from utils import GetChoices
 
 
 # Create your views here.
-
 def index(request):
     """
         Start page with the filter and instruction to API service
@@ -113,9 +112,9 @@ def add_data(request, form_obj):
     if form_obj in obj_dict:
         if request.method == 'GET':
             form = obj_dict.get(form_obj)
-            data = {'title': 'Add new info',
+            data = {'title': f'Add new {form_obj}',
                     'form': form,
-                    'message': 'Add new information'
+                    'message': form_obj
                     }
             return render(request, 'fuel/add_information.html', data)
         if request.method == 'POST':

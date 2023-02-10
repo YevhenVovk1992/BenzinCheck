@@ -1,5 +1,5 @@
 {% extends 'fuel/base.html' %}
-{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block content %}
@@ -8,10 +8,8 @@
         <div class="form">
             <form method="POST">
                 {% csrf_token %}
-                {% for el in form %}
-                    {{ el|as_crispy_field }}
-                {% endfor %}
-                <button class="form__button" type="submit">
+                {{ form | crispy  }}
+                <button class="button-click" type="submit">
                     Send
                 </button>
             </form>

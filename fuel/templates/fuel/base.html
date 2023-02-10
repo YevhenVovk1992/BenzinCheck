@@ -24,7 +24,8 @@
     {% if user.is_superuser %}
         <nav class="style-1">
 
-            <a href={% url 'add_data' form_obj='region' %} class="btn">Add fuel</a>
+            <a href={% url 'add_data' form_obj='fuel' %} class="btn">Add fuel</a>
+            <a href={% url 'add_data' form_obj='region' %} class="btn">Add region</a>
             <a href={% url 'add_data' form_obj='fuel_operator' %} class="btn">Add fuel operator</a>
             <h2>Hello SuperUser!</h2>
             <a href={% url 'add_fuel_price' %} class="btn">Add fuel price for the fuel</a>
