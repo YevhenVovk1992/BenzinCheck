@@ -49,19 +49,12 @@ class PriceTable(models.Model):
     id_region = models.ForeignKey(Region, null=False, related_name='region', on_delete=models.RESTRICT)
     id_fuel_operator = models.ForeignKey(FuelOperator, null=False, related_name='operator', on_delete=models.RESTRICT)
     date = models.DateField(null=False, validators=[DateValidator.date_validator])
-    price = models.IntegerField(
+    price = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
         null=False,
         validators=[MinValueValidator(limit_value=1, message='Price must be greater then 0')]
     )
-
-    def to_dict(self):
-        return {
-            'fuel': self.id_fuel.name,
-            'region': self.id_region.name,
-            'fuel_operator': self.id_fuel_operator.name,
-            'data': str(self.date),
-            'price': str(self.price)
-        }
 
     class Meta:
         ordering = ['date']

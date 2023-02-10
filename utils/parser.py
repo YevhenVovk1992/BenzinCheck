@@ -80,7 +80,8 @@ async def get_html(url: str, query_list: list) -> list:
             async with aiohttp.ClientSession() as session:
                 async with session.get(url, headers=HEADERS) as resp:
                     if resp.status == 200:
-                        html_list.append({query[1]: await resp.text()})
+                        page = await resp.text()
+                        html_list.append({query[1]: page})
         except Exception as msg:
             logging.error(msg, exc_info=True)
             continue
@@ -95,11 +96,8 @@ async def page_parse(html_list: list) -> list:
         for key, value in region.items():
             soup = BeautifulSoup(value, 'html.parser')
             tables = [
-                [
-                    [td.get_text(strip=True) for td in tr.find_all('td')]
-                    for tr in table.find_all('tr')
-                ]
-                for table in soup.find_all('table')
+                [[td.get_text(strip=True) for td in tr.find_all('td')]
+                 for tr in table.find_all('tr')] for table in soup.find_all('table')
             ]
             for el in tables[0][1:]:
                 fuel_price[el[0]] = {
