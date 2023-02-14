@@ -26,6 +26,5 @@ urlpatterns = [
     path('operator/', include(operator_router.urls)),
     path('history/<str:start_date>', views.HistoryPriceAPIGet.as_view()),
     path('history/<str:start_date>/<str:end_date>', views.HistoryPriceAPIGet.as_view())
-
 ]
 

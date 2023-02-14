@@ -1,12 +1,9 @@
-from datetime import timedelta, datetime
+from datetime import datetime
 
-from django.shortcuts import render
+
 from django.utils import timezone
-from rest_framework import generics, viewsets, request
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework import generics, viewsets
+from rest_framework.permissions import IsAdminUser
 
 from fuel import models
 from api_v10 import serializer, permissions
