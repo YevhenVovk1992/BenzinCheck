@@ -42,7 +42,7 @@ class PriceAPIGet(generics.ListCreateAPIView, QueryParamsMixin):
                 date=timezone.now().date(),
                 id=get_id
             ).all()
-        if query_params:
+        else:
             queryset = models.PriceTable.objects.filter(date=timezone.now().date(), **query_params).all()
         return queryset
 
