@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from rest_framework.authtoken.views import obtain_auth_token
 from fuel import views
 
 
@@ -23,8 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('fuel/', include("fuel.urls")),
     path('api/v1.0/', include("api_v10.urls")),
-    path('api/v1.0/auth/', include("djoser.urls")),
-    path('api/v1.0/auth_token/', include("djoser.urls.authtoken")),
+    path('api-token-auth/', obtain_auth_token),
     path('login', views.user_login, name='login'),
     path('logout', views.user_logout, name='logout'),
     path('update_data', views.update_database, name='update_data'),
