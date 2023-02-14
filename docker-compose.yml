@@ -4,8 +4,12 @@ services:
   web:
     build: .
     command: >
-      sh -c "python3 manage.py migrate &&
-             python3 manage.py runserver 0.0.0.0:8000"
+      sh -c "python3 manage.py migrate &&  
+             python3 manage.py loaddata fixtures/fueloperator.json --app fuel.fueloperator &&
+             python3 manage.py loaddata fixtures/fuel.json --app fuel.fuel &&
+             python3 manage.py loaddata fixtures/region.json --app fuel.region &&
+             python3 manage.py runserver 0.0.0.0:8000 &&
+             celery -A BenzinCheck worker --beat --scheduler django --loglevel=info"
     volumes:
       - .:/app
     ports:
@@ -32,12 +36,6 @@ services:
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-
-  adminer:
-    image: 'adminer'
-    restart: always
-    ports:
-      - "8080:8080"
 
   rabbit:
     image: 'rabbitmq'

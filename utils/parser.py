@@ -73,18 +73,18 @@ async def db_connect(path_to_env: str):
 
 async def get_html(url: str, query_list: list) -> list:
     html_list = []
-    logging.info('Get HTML pages')
+    logging.info('Get HTML pages: ')
     for query in query_list:
         url += f'{query[0]}/#refuel'
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(url, headers=HEADERS) as resp:
                     if resp.status == 200:
-                        page = await resp.text()
-                        html_list.append({query[1]: page})
+                        logging.info(f'Get {query[1]} page')
+                        html_list.append({query[1]: await resp.text()})
         except Exception as msg:
             logging.error(msg, exc_info=True)
-            continue
+            continue 
     return html_list
 
 

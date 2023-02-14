@@ -1,0 +1,42 @@
+### GET request with a header
+GET http://127.0.0.1:8000/api/v1.0/price_today/
+Accept: application/json
+
+### Post
+POST http://127.0.0.1:8000/api/v1.0/price_today/
+Content-Type: application/json
+Authorization: Token b8b056ff5f9ba121adc65ba03a1ac7b8e7c40902
+
+{
+  "id_fuel": 1,
+  "id_region": 1,
+  "id_fuel_operator": 1,
+  "price": 100.00
+}
+
+### update
+PUT http://127.0.0.1:8000/api/v1.0/price_today/update/865
+Content-Type: application/json
+Authorization: Token b8b056ff5f9ba121adc65ba03a1ac7b8e7c40902
+
+{
+  "id_fuel": 6,
+  "id_region": 1,
+  "id_fuel_operator": 2,
+  "price": 3140.00
+}
+
+### delete
+DELETE http://127.0.0.1:8000/api/v1.0/price_today/delete/865
+Content-Type: application/json
+Authorization: Token b8b056ff5f9ba121adc65ba03a1ac7b8e7c40902
+
+
+### Get user token.
+POST http://127.0.0.1:8000/api-token-auth/
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}

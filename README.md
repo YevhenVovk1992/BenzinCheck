@@ -12,7 +12,7 @@ The data is received by the asynchronous parser. You can start the parser once a
 You can edit records in the database through the menu on the start page. You must first log in to the site. Or you can use the django admin panel.
 ___
 ### How to start project?
-1. pip install -r requerements.txt;
+1. pip install -r requirements.txt;
 2. Create .env file and write to it enviroment variables:
 	- SECRET_KEY
 	- POSTGRES_USER
@@ -21,11 +21,13 @@ ___
 	- DB_HOST
 	- DB_PORT
 	- CELERY_BROKER_URL (pyamqp://guest@localhost//)
-3. Run 'docker-compose up -d'to make a container for the whole application ('python manage.py migrate' start automaticaly);
-4. Run 'python manage.py migrate' (If you are using docker, the migration takes place when the container is started);
-5. Create superuser 'python manage.py createsuperuser' and add user's groups: guide and traveler in admin panel;
-6. Run Celery Worker - celery -A BenzinCheck worker --beat --scheduler django --loglevel=info;
-7. Load fixtures:
-	- python manage.py loaddata fixtures/fuel.json --app fuel.fuel
-	- python manage.py loaddata fixtures/fueloperator.json --app fuel.fueloperator
-	- python manage.py loaddata fixtures/region.json --app fuel.region
+3. Run `docker-compose up -d` to make a container for the whole application
+('python manage.py migrate' start automatically and Load base fixture start automatically too);
+4. Run `python manage.py migrate`;
+5. Create superuser `python manage.py createsuperuser`; 
+6. Load base fixture:
+ - `python3 manage.py loaddata fixtures/fueloperator.json --app fuel.fueloperator`
+ - `python3 manage.py loaddata fixtures/fuel.json --app fuel.fuel`
+ - `python3 manage.py loaddata fixtures/region.json --app fuel.region`
+7. Run Celery Worker  `celery -A BenzinCheck worker --beat --scheduler django --loglevel=info`;
+8. 
