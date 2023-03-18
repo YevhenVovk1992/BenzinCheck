@@ -19,8 +19,10 @@ from fuel import views
 
 urlpatterns = [
     path('', views.index, name='start_page'),
-    path('add_<str:form_obj>', views.add_data, name='add_data'),
-    path('fuel_price_add', views.add_fuel_price, name='add_fuel_price'),
-    path('fuel_price_table', views.fuel_price_table, name='fuel_price_table'),
-    path('API_info', views.get_api_info, name='api_info')
+    path('add_<str:form_obj>/', views.add_data, name='add_data'),
+    path('fuel_price_add/', views.add_fuel_price, name='add_fuel_price'),
+    path('fuel_price_table/', views.fuel_price_table, name='fuel_price_table'),
+    path('API_info/', views.get_api_info, name='api_info'),
+    path('update_data/', views.update_database, name='update_data'),
+    path('update_info/', views.info_updates, name='info_updates')
 ]

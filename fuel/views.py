@@ -199,23 +199,30 @@ def user_logout(request):
 @login_required(login_url='login')
 def update_database(request):
     now_date = timezone.now().date()
-    get_run_date = models.UpdateDatabase.objects.order_by('-run_date').first()
-    if get_run_date is not None:
-        update_date = get_run_date.run_date
-    else:
-        update_date = now_date - timedelta(days=1)
-    if now_date > update_date:
-        try:
-            id_task = tasks.update_data.delay(str(now_date))
-            task = models.UpdateDatabase(
-                id_task=id_task,
-                run_date=now_date,
-                status='send to celery'
-            )
-            task.save()
-        except Exception:
-            return HttpResponse('Not connection to the database')
-        return HttpResponse(f'Start process {id_task}')
-    with open(os.path.abspath('logs/parser_file.log'), 'r') as log:
-        message = log.readlines()
-    return render(request, 'fuel/update_database_log.html', {'message': message})
+    message = 'Start autoupdate database'
+    try:
+        id_task = tasks.update_data.delay(str(now_date))
+        task = models.UpdateDatabase(
+            id_task=id_task,
+            run_date=now_date,
+            status='send to celery'
+        )
+        task.save()
+    except Exception:
+        return render(request, 'fuel/update_database.html', {'message': "Celery can't start"})
+    return render(request, 'fuel/update_database.html', {'message': message + '-' + str(id_task)})
+
+
+@login_required(login_url='login')
+def info_updates(request):
+    log_path = os.path.abspath('parser_file.log')
+    message = ['No log file.']
+    if os.path.exists(log_path):
+        with open(log_path, 'r') as log:
+            message = log.readlines()
+    get_celery_row = models.UpdateDatabase.objects.order_by('-run_date').first()
+    celery_status = f"Task ID:{get_celery_row.id_task} - Date:{get_celery_row.run_date} - Status:{get_celery_row.status}"
+    return render(request,
+                  'fuel/update_database_log.html',
+                  {'message': message, 'celery_status': celery_status}
+                  )

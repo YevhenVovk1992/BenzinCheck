@@ -5,11 +5,6 @@
     <div id="root">
         <a href={% url 'update_data' %} class="btn">Update data now</a>
         <h1>Status</h1>
-        <h3>Database up to date</h3>
-        <p>{{ celery_status }}</p>
-        <h3>Detailed information</h3>
-        {% for row in message %}
-            <p>{{ row }}</p>
-        {% endfor %}
+        <p>{{ message }}</p>
     </div>
 {% endblock %}

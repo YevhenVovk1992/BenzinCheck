@@ -1,5 +1,7 @@
 import datetime
 import asyncio
+import os
+
 import aiohttp
 import asyncpg
 import logging
@@ -44,8 +46,8 @@ HEADERS = {
 
 
 def logger_info(folder_path: str) -> None:
-    folder_path += '/logs/parser_file.log'
-    logging.basicConfig(filename=folder_path,
+    log_path = folder_path + '/parser_file.log'
+    logging.basicConfig(filename=log_path,
                         encoding='utf-8',
                         level=logging.INFO,
                         filemode='w',
